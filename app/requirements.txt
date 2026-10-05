@@ -1,0 +1,8 @@
+# Used by Streamlit Community Cloud, which looks next to the app file first.
+# The app only reads results, so it does not need PyTorch.
+numpy>=1.26
+pandas>=2.2
+duckdb>=1.1
+streamlit>=1.50
+altair>=5.4
+snowflake-connector-python[pandas]>=3.12

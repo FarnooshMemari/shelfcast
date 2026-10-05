@@ -1,0 +1,21 @@
+# Data and outputs (the real data is downloaded when you run the pipeline)
+data/
+models/
+reports/synthetic/
+*.duckdb
+*.duckdb.wal
+
+# Secrets
+.env
+.streamlit/secrets.toml
+
+# Python and editors
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+venv/
+.ipynb_checkpoints/
+.DS_Store
+.vscode/
+.idea/

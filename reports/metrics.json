@@ -1,0 +1,45 @@
+{
+  "run_id": "20261005T002309",
+  "data_source": "UCI Online Retail II (real data)",
+  "metrics": {
+    "as_of": "2011-12-09",
+    "test_period": "2011-11-26 to 2011-12-09",
+    "products": 200,
+    "history_days": 739,
+    "training_windows": 128400,
+    "best_epoch": 2,
+    "wape_shelfcast": 0.7206,
+    "wape_same_weekday_last_week": 1.0107,
+    "wape_28_day_average": 0.9708,
+    "coverage_p10_p90": 0.9271,
+    "mae_shelfcast": 30.593,
+    "wape_total_shelfcast": 0.3989,
+    "wape_total_same_weekday_last_week": 0.5264,
+    "wape_total_28_day_average": 0.4204,
+    "coverage_total_p10_p90": 0.81,
+    "coverage_total_summed_daily": 0.95,
+    "total_band_narrower_than_summed_daily": 0.4655,
+    "improvement_vs_best_baseline": 0.2577,
+    "total_improvement_vs_best_baseline": 0.0511,
+    "train_seconds": 30.7,
+    "order_value_running_total_p90": 67797.18,
+    "order_value_if_summing_daily_p90": 127059.69
+  },
+  "settings": {
+    "epochs": 40,
+    "batch_size": 512,
+    "lr": 0.001,
+    "weight_decay": 0.0001,
+    "hidden": 256,
+    "patience": 6,
+    "clip_quantile": 0.995,
+    "seed": 0
+  },
+  "model": {
+    "type": "QuantileForecaster (MLP, PyTorch)",
+    "parameters": 127572,
+    "inputs": "56 days of scaled sales + weekdays of the 14 forecast days",
+    "outputs": "P10 / P50 / P90 of daily sales and of the running total for each of the next 14 days",
+    "features": 156
+  }
+}

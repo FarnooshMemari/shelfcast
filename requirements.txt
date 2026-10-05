@@ -1,0 +1,14 @@
+# Core
+numpy>=1.26
+pandas>=2.2
+torch>=2.2
+duckdb>=1.1
+# App
+streamlit>=1.50
+altair>=5.4
+# Snowflake (connector + pandas support)
+snowflake-connector-python[pandas]>=3.12
+# Reads the real dataset, which comes as an Excel file
+openpyxl>=3.1
+# Tests
+pytest>=8
