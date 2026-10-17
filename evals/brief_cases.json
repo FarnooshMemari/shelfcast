@@ -1,0 +1,1267 @@
+[
+ {
+  "id": "review3_buffer0_top3",
+  "settings": {
+   "review_days": 3,
+   "buffer": 0.0,
+   "top": 3
+  },
+  "context": {
+   "as_of": "2011-12-09",
+   "rows": [
+    {
+     "status": "Order now",
+     "stock_code": "22086",
+     "description": "PAPER CHAIN KIT 50'S CHRISTMAS",
+     "on_hand": 1659,
+     "days_left": 8,
+     "lead_time_days": 10,
+     "demand_low": 1441.1,
+     "demand_mid": 2975.1,
+     "demand_high": 5226.1,
+     "order_qty": 1317,
+     "order_value": 2331.09,
+     "why": "Next 13 days: expect 2,975 units (80% range 1,441-5,226). 1,659 on hand lasts about 8 days; a new order takes 10 days."
+    },
+    {
+     "status": "Order now",
+     "stock_code": "22910",
+     "description": "PAPER CHAIN KIT VINTAGE CHRISTMAS",
+     "on_hand": 144,
+     "days_left": 2,
+     "lead_time_days": 7,
+     "demand_low": 438.9,
+     "demand_mid": 966.1,
+     "demand_high": 1800.8,
+     "order_qty": 823,
+     "order_value": 1456.71,
+     "why": "Next 10 days: expect 966 units (80% range 439-1,801). 144 on hand lasts about 2 days; a new order takes 7 days."
+    },
+    {
+     "status": "Order now",
+     "stock_code": "22197",
+     "description": "SMALL POPCORN HOLDER",
+     "on_hand": 574,
+     "days_left": 3,
+     "lead_time_days": 5,
+     "demand_low": 1159.0,
+     "demand_mid": 2835.0,
+     "demand_high": 5923.3,
+     "order_qty": 2262,
+     "order_value": 1153.62,
+     "why": "Next 8 days: expect 2,835 units (80% range 1,159-5,923). 574 on hand lasts about 3 days; a new order takes 5 days."
+    }
+   ],
+   "totals": {
+    "order_now": 37,
+    "order_this_week": 26,
+    "products_reviewed": 200,
+    "order_value_gbp": 10763.9,
+    "products_shown": 3
+   }
+  }
+ },
+ {
+  "id": "review3_buffer0_top8",
+  "settings": {
+   "review_days": 3,
+   "buffer": 0.0,
+   "top": 8
+  },
+  "context": {
+   "as_of": "2011-12-09",
+   "rows": [
+    {
+     "status": "Order now",
+     "stock_code": "22086",
+     "description": "PAPER CHAIN KIT 50'S CHRISTMAS",
+     "on_hand": 1659,
+     "days_left": 8,
+     "lead_time_days": 10,
+     "demand_low": 1441.1,
+     "demand_mid": 2975.1,
+     "demand_high": 5226.1,
+     "order_qty": 1317,
+     "order_value": 2331.09,
+     "why": "Next 13 days: expect 2,975 units (80% range 1,441-5,226). 1,659 on hand lasts about 8 days; a new order takes 10 days."
+    },
+    {
+     "status": "Order now",
+     "stock_code": "22910",
+     "description": "PAPER CHAIN KIT VINTAGE CHRISTMAS",
+     "on_hand": 144,
+     "days_left": 2,
+     "lead_time_days": 7,
+     "demand_low": 438.9,
+     "demand_mid": 966.1,
+     "demand_high": 1800.8,
+     "order_qty": 823,
+     "order_value": 1456.71,
+     "why": "Next 10 days: expect 966 units (80% range 439-1,801). 144 on hand lasts about 2 days; a new order takes 7 days."
+    },
+    {
+     "status": "Order now",
+     "stock_code": "22197",
+     "description": "SMALL POPCORN HOLDER",
+     "on_hand": 574,
+     "days_left": 3,
+     "lead_time_days": 5,
+     "demand_low": 1159.0,
+     "demand_mid": 2835.0,
+     "demand_high": 5923.3,
+     "order_qty": 2262,
+     "order_value": 1153.62,
+     "why": "Next 8 days: expect 2,835 units (80% range 1,159-5,923). 574 on hand lasts about 3 days; a new order takes 5 days."
+    },
+    {
+     "status": "Order now",
+     "stock_code": "22114",
+     "description": "HOT WATER BOTTLE TEA AND SYMPATHY",
+     "on_hand": 215,
+     "days_left": 4,
+     "lead_time_days": 5,
+     "demand_low": 192.4,
+     "demand_mid": 439.6,
+     "demand_high": 860.2,
+     "order_qty": 225,
+     "order_value": 533.25,
+     "why": "Next 8 days: expect 440 units (80% range 192-860). 215 on hand lasts about 4 days; a new order takes 5 days."
+    },
+    {
+     "status": "Order now",
+     "stock_code": "22178",
+     "description": "VICTORIAN GLASS HANGING T-LIGHT",
+     "on_hand": 579,
+     "days_left": 8,
+     "lead_time_days": 10,
+     "demand_low": 497.6,
+     "demand_mid": 1044.8,
+     "demand_high": 1870.6,
+     "order_qty": 466,
+     "order_value": 349.5,
+     "why": "Next 13 days: expect 1,045 units (80% range 498-1,871). 579 on hand lasts about 8 days; a new order takes 10 days."
+    },
+    {
+     "status": "Order now",
+     "stock_code": "22077",
+     "description": "6 RIBBONS RUSTIC CHARM",
+     "on_hand": 88,
+     "days_left": 4,
+     "lead_time_days": 10,
+     "demand_low": 186.2,
+     "demand_mid": 440.0,
+     "demand_high": 844.7,
+     "order_qty": 353,
+     "order_value": 349.47,
+     "why": "Next 13 days: expect 440 units (80% range 186-845). 88 on hand lasts about 4 days; a new order takes 10 days."
+    },
+    {
+     "status": "Order now",
+     "stock_code": "82482",
+     "description": "WOODEN PICTURE FRAME WHITE FINISH",
+     "on_hand": 198,
+     "days_left": 6,
+     "lead_time_days": 10,
+     "demand_low": 178.4,
+     "demand_mid": 417.7,
+     "demand_high": 795.1,
+     "order_qty": 220,
+     "order_value": 336.6,
+     "why": "Next 13 days: expect 418 units (80% range 178-795). 198 on hand lasts about 6 days; a new order takes 10 days."
+    },
+    {
+     "status": "Order now",
+     "stock_code": "20914",
+     "description": "SET/5 RED SPOTTY LID GLASS BOWLS",
+     "on_hand": 121,
+     "days_left": 5,
+     "lead_time_days": 10,
+     "demand_low": 138.4,
+     "demand_mid": 304.5,
+     "demand_high": 539.6,
+     "order_qty": 184,
+     "order_value": 325.68,
+     "why": "Next 13 days: expect 304 units (80% range 138-540). 121 on hand lasts about 5 days; a new order takes 10 days."
+    }
+   ],
+   "totals": {
+    "order_now": 37,
+    "order_this_week": 26,
+    "products_reviewed": 200,
+    "order_value_gbp": 10763.9,
+    "products_shown": 8
+   }
+  }
+ },
+ {
+  "id": "review7_buffer0_top3",
+  "settings": {
+   "review_days": 7,
+   "buffer": 0.0,
+   "top": 3
+  },
+  "context": {
+   "as_of": "2011-12-09",
+   "rows": [
+    {
+     "status": "Order now",
+     "stock_code": "22086",
+     "description": "PAPER CHAIN KIT 50'S CHRISTMAS",
+     "on_hand": 1659,
+     "days_left": 8,
+     "lead_time_days": 10,
+     "demand_low": 1565.5,
+     "demand_mid": 3212.7,
+     "demand_high": 5590.0,
+     "order_qty": 1554,
+     "order_value": 2750.58,
+     "why": "Next 14 days: expect 3,213 units (80% range 1,566-5,590). 1,659 on hand lasts about 8 days; a new order takes 10 days."
+    },
+    {
+     "status": "Order now",
+     "stock_code": "22910",
+     "description": "PAPER CHAIN KIT VINTAGE CHRISTMAS",
+     "on_hand": 144,
+     "days_left": 2,
+     "lead_time_days": 7,
+     "demand_low": 750.3,
+     "demand_mid": 1545.3,
+     "demand_high": 2677.2,
+     "order_qty": 1402,
+     "order_value": 2481.54,
+     "why": "Next 14 days: expect 1,545 units (80% range 750-2,677). 144 on hand lasts about 2 days; a new order takes 7 days."
+    },
+    {
+     "status": "Order now",
+     "stock_code": "22197",
+     "description": "SMALL POPCORN HOLDER",
+     "on_hand": 574,
+     "days_left": 3,
+     "lead_time_days": 5,
+     "demand_low": 2261.2,
+     "demand_mid": 4749.6,
+     "demand_high": 8807.0,
+     "order_qty": 4176,
+     "order_value": 2129.76,
+     "why": "Next 12 days: expect 4,750 units (80% range 2,261-8,807). 574 on hand lasts about 3 days; a new order takes 5 days."
+    }
+   ],
+   "totals": {
+    "order_now": 37,
+    "order_this_week": 46,
+    "products_reviewed": 200,
+    "order_value_gbp": 19776.92,
+    "products_shown": 3
+   }
+  }
+ },
+ {
+  "id": "review7_buffer0_top8",
+  "settings": {
+   "review_days": 7,
+   "buffer": 0.0,
+   "top": 8
+  },
+  "context": {
+   "as_of": "2011-12-09",
+   "rows": [
+    {
+     "status": "Order now",
+     "stock_code": "22086",
+     "description": "PAPER CHAIN KIT 50'S CHRISTMAS",
+     "on_hand": 1659,
+     "days_left": 8,
+     "lead_time_days": 10,
+     "demand_low": 1565.5,
+     "demand_mid": 3212.7,
+     "demand_high": 5590.0,
+     "order_qty": 1554,
+     "order_value": 2750.58,
+     "why": "Next 14 days: expect 3,213 units (80% range 1,566-5,590). 1,659 on hand lasts about 8 days; a new order takes 10 days."
+    },
+    {
+     "status": "Order now",
+     "stock_code": "22910",
+     "description": "PAPER CHAIN KIT VINTAGE CHRISTMAS",
+     "on_hand": 144,
+     "days_left": 2,
+     "lead_time_days": 7,
+     "demand_low": 750.3,
+     "demand_mid": 1545.3,
+     "demand_high": 2677.2,
+     "order_qty": 1402,
+     "order_value": 2481.54,
+     "why": "Next 14 days: expect 1,545 units (80% range 750-2,677). 144 on hand lasts about 2 days; a new order takes 7 days."
+    },
+    {
+     "status": "Order now",
+     "stock_code": "22197",
+     "description": "SMALL POPCORN HOLDER",
+     "on_hand": 574,
+     "days_left": 3,
+     "lead_time_days": 5,
+     "demand_low": 2261.2,
+     "demand_mid": 4749.6,
+     "demand_high": 8807.0,
+     "order_qty": 4176,
+     "order_value": 2129.76,
+     "why": "Next 12 days: expect 4,750 units (80% range 2,261-8,807). 574 on hand lasts about 3 days; a new order takes 5 days."
+    },
+    {
+     "status": "Order now",
+     "stock_code": "22114",
+     "description": "HOT WATER BOTTLE TEA AND SYMPATHY",
+     "on_hand": 215,
+     "days_left": 4,
+     "lead_time_days": 5,
+     "demand_low": 357.9,
+     "demand_mid": 725.2,
+     "demand_high": 1286.2,
+     "order_qty": 511,
+     "order_value": 1211.07,
+     "why": "Next 12 days: expect 725 units (80% range 358-1,286). 215 on hand lasts about 4 days; a new order takes 5 days."
+    },
+    {
+     "status": "Order now",
+     "stock_code": "22457",
+     "description": "NATURAL SLATE HEART CHALKBOARD",
+     "on_hand": 140,
+     "days_left": 5,
+     "lead_time_days": 7,
+     "demand_low": 219.1,
+     "demand_mid": 445.9,
+     "demand_high": 777.7,
+     "order_qty": 306,
+     "order_value": 541.62,
+     "why": "Next 14 days: expect 446 units (80% range 219-778). 140 on hand lasts about 5 days; a new order takes 7 days."
+    },
+    {
+     "status": "Order now",
+     "stock_code": "22178",
+     "description": "VICTORIAN GLASS HANGING T-LIGHT",
+     "on_hand": 579,
+     "days_left": 8,
+     "lead_time_days": 10,
+     "demand_low": 547.0,
+     "demand_mid": 1135.6,
+     "demand_high": 2012.6,
+     "order_qty": 557,
+     "order_value": 417.75,
+     "why": "Next 14 days: expect 1,136 units (80% range 547-2,013). 579 on hand lasts about 8 days; a new order takes 10 days."
+    },
+    {
+     "status": "Order now",
+     "stock_code": "82482",
+     "description": "WOODEN PICTURE FRAME WHITE FINISH",
+     "on_hand": 198,
+     "days_left": 6,
+     "lead_time_days": 10,
+     "demand_low": 195.9,
+     "demand_mid": 454.6,
+     "demand_high": 853.6,
+     "order_qty": 257,
+     "order_value": 393.21,
+     "why": "Next 14 days: expect 455 units (80% range 196-854). 198 on hand lasts about 6 days; a new order takes 10 days."
+    },
+    {
+     "status": "Order now",
+     "stock_code": "22077",
+     "description": "6 RIBBONS RUSTIC CHARM",
+     "on_hand": 88,
+     "days_left": 4,
+     "lead_time_days": 10,
+     "demand_low": 204.5,
+     "demand_mid": 478.4,
+     "demand_high": 909.3,
+     "order_qty": 391,
+     "order_value": 387.09,
+     "why": "Next 14 days: expect 478 units (80% range 204-909). 88 on hand lasts about 4 days; a new order takes 10 days."
+    }
+   ],
+   "totals": {
+    "order_now": 37,
+    "order_this_week": 46,
+    "products_reviewed": 200,
+    "order_value_gbp": 19776.92,
+    "products_shown": 8
+   }
+  }
+ },
+ {
+  "id": "review7_buffer50_top3",
+  "settings": {
+   "review_days": 7,
+   "buffer": 0.5,
+   "top": 3
+  },
+  "context": {
+   "as_of": "2011-12-09",
+   "rows": [
+    {
+     "status": "Order now",
+     "stock_code": "22086",
+     "description": "PAPER CHAIN KIT 50'S CHRISTMAS",
+     "on_hand": 1659,
+     "days_left": 8,
+     "lead_time_days": 10,
+     "demand_low": 1565.5,
+     "demand_mid": 3212.7,
+     "demand_high": 5590.0,
+     "order_qty": 2743,
+     "order_value": 4855.11,
+     "why": "Next 14 days: expect 3,213 units (80% range 1,566-5,590). 1,659 on hand lasts about 8 days; a new order takes 10 days."
+    },
+    {
+     "status": "Order now",
+     "stock_code": "22910",
+     "description": "PAPER CHAIN KIT VINTAGE CHRISTMAS",
+     "on_hand": 144,
+     "days_left": 2,
+     "lead_time_days": 7,
+     "demand_low": 750.3,
+     "demand_mid": 1545.3,
+     "demand_high": 2677.2,
+     "order_qty": 1968,
+     "order_value": 3483.36,
+     "why": "Next 14 days: expect 1,545 units (80% range 750-2,677). 144 on hand lasts about 2 days; a new order takes 7 days."
+    },
+    {
+     "status": "Order now",
+     "stock_code": "22197",
+     "description": "SMALL POPCORN HOLDER",
+     "on_hand": 574,
+     "days_left": 3,
+     "lead_time_days": 5,
+     "demand_low": 2261.2,
+     "demand_mid": 4749.6,
+     "demand_high": 8807.0,
+     "order_qty": 6205,
+     "order_value": 3164.55,
+     "why": "Next 12 days: expect 4,750 units (80% range 2,261-8,807). 574 on hand lasts about 3 days; a new order takes 5 days."
+    }
+   ],
+   "totals": {
+    "order_now": 37,
+    "order_this_week": 83,
+    "products_reviewed": 200,
+    "order_value_gbp": 40963.46,
+    "products_shown": 3
+   }
+  }
+ },
+ {
+  "id": "review7_buffer50_top8",
+  "settings": {
+   "review_days": 7,
+   "buffer": 0.5,
+   "top": 8
+  },
+  "context": {
+   "as_of": "2011-12-09",
+   "rows": [
+    {
+     "status": "Order now",
+     "stock_code": "22086",
+     "description": "PAPER CHAIN KIT 50'S CHRISTMAS",
+     "on_hand": 1659,
+     "days_left": 8,
+     "lead_time_days": 10,
+     "demand_low": 1565.5,
+     "demand_mid": 3212.7,
+     "demand_high": 5590.0,
+     "order_qty": 2743,
+     "order_value": 4855.11,
+     "why": "Next 14 days: expect 3,213 units (80% range 1,566-5,590). 1,659 on hand lasts about 8 days; a new order takes 10 days."
+    },
+    {
+     "status": "Order now",
+     "stock_code": "22910",
+     "description": "PAPER CHAIN KIT VINTAGE CHRISTMAS",
+     "on_hand": 144,
+     "days_left": 2,
+     "lead_time_days": 7,
+     "demand_low": 750.3,
+     "demand_mid": 1545.3,
+     "demand_high": 2677.2,
+     "order_qty": 1968,
+     "order_value": 3483.36,
+     "why": "Next 14 days: expect 1,545 units (80% range 750-2,677). 144 on hand lasts about 2 days; a new order takes 7 days."
+    },
+    {
+     "status": "Order now",
+     "stock_code": "22197",
+     "description": "SMALL POPCORN HOLDER",
+     "on_hand": 574,
+     "days_left": 3,
+     "lead_time_days": 5,
+     "demand_low": 2261.2,
+     "demand_mid": 4749.6,
+     "demand_high": 8807.0,
+     "order_qty": 6205,
+     "order_value": 3164.55,
+     "why": "Next 12 days: expect 4,750 units (80% range 2,261-8,807). 574 on hand lasts about 3 days; a new order takes 5 days."
+    },
+    {
+     "status": "Order now",
+     "stock_code": "22114",
+     "description": "HOT WATER BOTTLE TEA AND SYMPATHY",
+     "on_hand": 215,
+     "days_left": 4,
+     "lead_time_days": 5,
+     "demand_low": 357.9,
+     "demand_mid": 725.2,
+     "demand_high": 1286.2,
+     "order_qty": 791,
+     "order_value": 1874.67,
+     "why": "Next 12 days: expect 725 units (80% range 358-1,286). 215 on hand lasts about 4 days; a new order takes 5 days."
+    },
+    {
+     "status": "Order now",
+     "stock_code": "22457",
+     "description": "NATURAL SLATE HEART CHALKBOARD",
+     "on_hand": 140,
+     "days_left": 5,
+     "lead_time_days": 7,
+     "demand_low": 219.1,
+     "demand_mid": 445.9,
+     "demand_high": 777.7,
+     "order_qty": 472,
+     "order_value": 835.44,
+     "why": "Next 14 days: expect 446 units (80% range 219-778). 140 on hand lasts about 5 days; a new order takes 7 days."
+    },
+    {
+     "status": "Order now",
+     "stock_code": "22178",
+     "description": "VICTORIAN GLASS HANGING T-LIGHT",
+     "on_hand": 579,
+     "days_left": 8,
+     "lead_time_days": 10,
+     "demand_low": 547.0,
+     "demand_mid": 1135.6,
+     "demand_high": 2012.6,
+     "order_qty": 996,
+     "order_value": 747.0,
+     "why": "Next 14 days: expect 1,136 units (80% range 547-2,013). 579 on hand lasts about 8 days; a new order takes 10 days."
+    },
+    {
+     "status": "Order now",
+     "stock_code": "82482",
+     "description": "WOODEN PICTURE FRAME WHITE FINISH",
+     "on_hand": 198,
+     "days_left": 6,
+     "lead_time_days": 10,
+     "demand_low": 195.9,
+     "demand_mid": 454.6,
+     "demand_high": 853.6,
+     "order_qty": 457,
+     "order_value": 699.21,
+     "why": "Next 14 days: expect 455 units (80% range 196-854). 198 on hand lasts about 6 days; a new order takes 10 days."
+    },
+    {
+     "status": "Order now",
+     "stock_code": "22077",
+     "description": "6 RIBBONS RUSTIC CHARM",
+     "on_hand": 88,
+     "days_left": 4,
+     "lead_time_days": 10,
+     "demand_low": 204.5,
+     "demand_mid": 478.4,
+     "demand_high": 909.3,
+     "order_qty": 606,
+     "order_value": 599.94,
+     "why": "Next 14 days: expect 478 units (80% range 204-909). 88 on hand lasts about 4 days; a new order takes 10 days."
+    }
+   ],
+   "totals": {
+    "order_now": 37,
+    "order_this_week": 83,
+    "products_reviewed": 200,
+    "order_value_gbp": 40963.46,
+    "products_shown": 8
+   }
+  }
+ },
+ {
+  "id": "review7_buffer100_top3",
+  "settings": {
+   "review_days": 7,
+   "buffer": 1.0,
+   "top": 3
+  },
+  "context": {
+   "as_of": "2011-12-09",
+   "rows": [
+    {
+     "status": "Order now",
+     "stock_code": "22086",
+     "description": "PAPER CHAIN KIT 50'S CHRISTMAS",
+     "on_hand": 1659,
+     "days_left": 8,
+     "lead_time_days": 10,
+     "demand_low": 1565.5,
+     "demand_mid": 3212.7,
+     "demand_high": 5590.0,
+     "order_qty": 3932,
+     "order_value": 6959.64,
+     "why": "Next 14 days: expect 3,213 units (80% range 1,566-5,590). 1,659 on hand lasts about 8 days; a new order takes 10 days."
+    },
+    {
+     "status": "Order now",
+     "stock_code": "22910",
+     "description": "PAPER CHAIN KIT VINTAGE CHRISTMAS",
+     "on_hand": 144,
+     "days_left": 2,
+     "lead_time_days": 7,
+     "demand_low": 750.3,
+     "demand_mid": 1545.3,
+     "demand_high": 2677.2,
+     "order_qty": 2534,
+     "order_value": 4485.18,
+     "why": "Next 14 days: expect 1,545 units (80% range 750-2,677). 144 on hand lasts about 2 days; a new order takes 7 days."
+    },
+    {
+     "status": "Order now",
+     "stock_code": "22197",
+     "description": "SMALL POPCORN HOLDER",
+     "on_hand": 574,
+     "days_left": 3,
+     "lead_time_days": 5,
+     "demand_low": 2261.2,
+     "demand_mid": 4749.6,
+     "demand_high": 8807.0,
+     "order_qty": 8234,
+     "order_value": 4199.34,
+     "why": "Next 12 days: expect 4,750 units (80% range 2,261-8,807). 574 on hand lasts about 3 days; a new order takes 5 days."
+    }
+   ],
+   "totals": {
+    "order_now": 37,
+    "order_this_week": 122,
+    "products_reviewed": 200,
+    "order_value_gbp": 70360.97,
+    "products_shown": 3
+   }
+  }
+ },
+ {
+  "id": "review7_buffer100_top8",
+  "settings": {
+   "review_days": 7,
+   "buffer": 1.0,
+   "top": 8
+  },
+  "context": {
+   "as_of": "2011-12-09",
+   "rows": [
+    {
+     "status": "Order now",
+     "stock_code": "22086",
+     "description": "PAPER CHAIN KIT 50'S CHRISTMAS",
+     "on_hand": 1659,
+     "days_left": 8,
+     "lead_time_days": 10,
+     "demand_low": 1565.5,
+     "demand_mid": 3212.7,
+     "demand_high": 5590.0,
+     "order_qty": 3932,
+     "order_value": 6959.64,
+     "why": "Next 14 days: expect 3,213 units (80% range 1,566-5,590). 1,659 on hand lasts about 8 days; a new order takes 10 days."
+    },
+    {
+     "status": "Order now",
+     "stock_code": "22910",
+     "description": "PAPER CHAIN KIT VINTAGE CHRISTMAS",
+     "on_hand": 144,
+     "days_left": 2,
+     "lead_time_days": 7,
+     "demand_low": 750.3,
+     "demand_mid": 1545.3,
+     "demand_high": 2677.2,
+     "order_qty": 2534,
+     "order_value": 4485.18,
+     "why": "Next 14 days: expect 1,545 units (80% range 750-2,677). 144 on hand lasts about 2 days; a new order takes 7 days."
+    },
+    {
+     "status": "Order now",
+     "stock_code": "22197",
+     "description": "SMALL POPCORN HOLDER",
+     "on_hand": 574,
+     "days_left": 3,
+     "lead_time_days": 5,
+     "demand_low": 2261.2,
+     "demand_mid": 4749.6,
+     "demand_high": 8807.0,
+     "order_qty": 8234,
+     "order_value": 4199.34,
+     "why": "Next 12 days: expect 4,750 units (80% range 2,261-8,807). 574 on hand lasts about 3 days; a new order takes 5 days."
+    },
+    {
+     "status": "Order now",
+     "stock_code": "22114",
+     "description": "HOT WATER BOTTLE TEA AND SYMPATHY",
+     "on_hand": 215,
+     "days_left": 4,
+     "lead_time_days": 5,
+     "demand_low": 357.9,
+     "demand_mid": 725.2,
+     "demand_high": 1286.2,
+     "order_qty": 1072,
+     "order_value": 2540.64,
+     "why": "Next 12 days: expect 725 units (80% range 358-1,286). 215 on hand lasts about 4 days; a new order takes 5 days."
+    },
+    {
+     "status": "Order now",
+     "stock_code": "22457",
+     "description": "NATURAL SLATE HEART CHALKBOARD",
+     "on_hand": 140,
+     "days_left": 5,
+     "lead_time_days": 7,
+     "demand_low": 219.1,
+     "demand_mid": 445.9,
+     "demand_high": 777.7,
+     "order_qty": 638,
+     "order_value": 1129.26,
+     "why": "Next 14 days: expect 446 units (80% range 219-778). 140 on hand lasts about 5 days; a new order takes 7 days."
+    },
+    {
+     "status": "Order now",
+     "stock_code": "22178",
+     "description": "VICTORIAN GLASS HANGING T-LIGHT",
+     "on_hand": 579,
+     "days_left": 8,
+     "lead_time_days": 10,
+     "demand_low": 547.0,
+     "demand_mid": 1135.6,
+     "demand_high": 2012.6,
+     "order_qty": 1434,
+     "order_value": 1075.5,
+     "why": "Next 14 days: expect 1,136 units (80% range 547-2,013). 579 on hand lasts about 8 days; a new order takes 10 days."
+    },
+    {
+     "status": "Order now",
+     "stock_code": "82482",
+     "description": "WOODEN PICTURE FRAME WHITE FINISH",
+     "on_hand": 198,
+     "days_left": 6,
+     "lead_time_days": 10,
+     "demand_low": 195.9,
+     "demand_mid": 454.6,
+     "demand_high": 853.6,
+     "order_qty": 656,
+     "order_value": 1003.68,
+     "why": "Next 14 days: expect 455 units (80% range 196-854). 198 on hand lasts about 6 days; a new order takes 10 days."
+    },
+    {
+     "status": "Order now",
+     "stock_code": "22077",
+     "description": "6 RIBBONS RUSTIC CHARM",
+     "on_hand": 88,
+     "days_left": 4,
+     "lead_time_days": 10,
+     "demand_low": 204.5,
+     "demand_mid": 478.4,
+     "demand_high": 909.3,
+     "order_qty": 822,
+     "order_value": 813.78,
+     "why": "Next 14 days: expect 478 units (80% range 204-909). 88 on hand lasts about 4 days; a new order takes 10 days."
+    }
+   ],
+   "totals": {
+    "order_now": 37,
+    "order_this_week": 122,
+    "products_reviewed": 200,
+    "order_value_gbp": 70360.97,
+    "products_shown": 8
+   }
+  }
+ },
+ {
+  "id": "review14_buffer100_top3",
+  "settings": {
+   "review_days": 14,
+   "buffer": 1.0,
+   "top": 3
+  },
+  "context": {
+   "as_of": "2011-12-09",
+   "rows": [
+    {
+     "status": "Order now",
+     "stock_code": "22086",
+     "description": "PAPER CHAIN KIT 50'S CHRISTMAS",
+     "on_hand": 1659,
+     "days_left": 8,
+     "lead_time_days": 10,
+     "demand_low": 1565.5,
+     "demand_mid": 3212.7,
+     "demand_high": 5590.0,
+     "order_qty": 3932,
+     "order_value": 6959.64,
+     "why": "Next 14 days: expect 3,213 units (80% range 1,566-5,590). 1,659 on hand lasts about 8 days; a new order takes 10 days."
+    },
+    {
+     "status": "Order now",
+     "stock_code": "22197",
+     "description": "SMALL POPCORN HOLDER",
+     "on_hand": 574,
+     "days_left": 3,
+     "lead_time_days": 5,
+     "demand_low": 2840.9,
+     "demand_mid": 5825.7,
+     "demand_high": 10505.9,
+     "order_qty": 9932,
+     "order_value": 5065.32,
+     "why": "Next 14 days: expect 5,826 units (80% range 2,841-10,506). 574 on hand lasts about 3 days; a new order takes 5 days."
+    },
+    {
+     "status": "Order now",
+     "stock_code": "22910",
+     "description": "PAPER CHAIN KIT VINTAGE CHRISTMAS",
+     "on_hand": 144,
+     "days_left": 2,
+     "lead_time_days": 7,
+     "demand_low": 750.3,
+     "demand_mid": 1545.3,
+     "demand_high": 2677.2,
+     "order_qty": 2534,
+     "order_value": 4485.18,
+     "why": "Next 14 days: expect 1,545 units (80% range 750-2,677). 144 on hand lasts about 2 days; a new order takes 7 days."
+    }
+   ],
+   "totals": {
+    "order_now": 37,
+    "order_this_week": 137,
+    "products_reviewed": 200,
+    "order_value_gbp": 86408.04,
+    "products_shown": 3
+   }
+  }
+ },
+ {
+  "id": "review14_buffer100_top8",
+  "settings": {
+   "review_days": 14,
+   "buffer": 1.0,
+   "top": 8
+  },
+  "context": {
+   "as_of": "2011-12-09",
+   "rows": [
+    {
+     "status": "Order now",
+     "stock_code": "22086",
+     "description": "PAPER CHAIN KIT 50'S CHRISTMAS",
+     "on_hand": 1659,
+     "days_left": 8,
+     "lead_time_days": 10,
+     "demand_low": 1565.5,
+     "demand_mid": 3212.7,
+     "demand_high": 5590.0,
+     "order_qty": 3932,
+     "order_value": 6959.64,
+     "why": "Next 14 days: expect 3,213 units (80% range 1,566-5,590). 1,659 on hand lasts about 8 days; a new order takes 10 days."
+    },
+    {
+     "status": "Order now",
+     "stock_code": "22197",
+     "description": "SMALL POPCORN HOLDER",
+     "on_hand": 574,
+     "days_left": 3,
+     "lead_time_days": 5,
+     "demand_low": 2840.9,
+     "demand_mid": 5825.7,
+     "demand_high": 10505.9,
+     "order_qty": 9932,
+     "order_value": 5065.32,
+     "why": "Next 14 days: expect 5,826 units (80% range 2,841-10,506). 574 on hand lasts about 3 days; a new order takes 5 days."
+    },
+    {
+     "status": "Order now",
+     "stock_code": "22910",
+     "description": "PAPER CHAIN KIT VINTAGE CHRISTMAS",
+     "on_hand": 144,
+     "days_left": 2,
+     "lead_time_days": 7,
+     "demand_low": 750.3,
+     "demand_mid": 1545.3,
+     "demand_high": 2677.2,
+     "order_qty": 2534,
+     "order_value": 4485.18,
+     "why": "Next 14 days: expect 1,545 units (80% range 750-2,677). 144 on hand lasts about 2 days; a new order takes 7 days."
+    },
+    {
+     "status": "Order now",
+     "stock_code": "22114",
+     "description": "HOT WATER BOTTLE TEA AND SYMPATHY",
+     "on_hand": 215,
+     "days_left": 4,
+     "lead_time_days": 5,
+     "demand_low": 441.9,
+     "demand_mid": 882.1,
+     "demand_high": 1525.6,
+     "order_qty": 1311,
+     "order_value": 3107.07,
+     "why": "Next 14 days: expect 882 units (80% range 442-1,526). 215 on hand lasts about 4 days; a new order takes 5 days."
+    },
+    {
+     "status": "Order now",
+     "stock_code": "22457",
+     "description": "NATURAL SLATE HEART CHALKBOARD",
+     "on_hand": 140,
+     "days_left": 5,
+     "lead_time_days": 7,
+     "demand_low": 219.1,
+     "demand_mid": 445.9,
+     "demand_high": 777.7,
+     "order_qty": 638,
+     "order_value": 1129.26,
+     "why": "Next 14 days: expect 446 units (80% range 219-778). 140 on hand lasts about 5 days; a new order takes 7 days."
+    },
+    {
+     "status": "Order now",
+     "stock_code": "22178",
+     "description": "VICTORIAN GLASS HANGING T-LIGHT",
+     "on_hand": 579,
+     "days_left": 8,
+     "lead_time_days": 10,
+     "demand_low": 547.0,
+     "demand_mid": 1135.6,
+     "demand_high": 2012.6,
+     "order_qty": 1434,
+     "order_value": 1075.5,
+     "why": "Next 14 days: expect 1,136 units (80% range 547-2,013). 579 on hand lasts about 8 days; a new order takes 10 days."
+    },
+    {
+     "status": "Order now",
+     "stock_code": "82482",
+     "description": "WOODEN PICTURE FRAME WHITE FINISH",
+     "on_hand": 198,
+     "days_left": 6,
+     "lead_time_days": 10,
+     "demand_low": 195.9,
+     "demand_mid": 454.6,
+     "demand_high": 853.6,
+     "order_qty": 656,
+     "order_value": 1003.68,
+     "why": "Next 14 days: expect 455 units (80% range 196-854). 198 on hand lasts about 6 days; a new order takes 10 days."
+    },
+    {
+     "status": "Order now",
+     "stock_code": "22077",
+     "description": "6 RIBBONS RUSTIC CHARM",
+     "on_hand": 88,
+     "days_left": 4,
+     "lead_time_days": 10,
+     "demand_low": 204.5,
+     "demand_mid": 478.4,
+     "demand_high": 909.3,
+     "order_qty": 822,
+     "order_value": 813.78,
+     "why": "Next 14 days: expect 478 units (80% range 204-909). 88 on hand lasts about 4 days; a new order takes 10 days."
+    }
+   ],
+   "totals": {
+    "order_now": 37,
+    "order_this_week": 137,
+    "products_reviewed": 200,
+    "order_value_gbp": 86408.04,
+    "products_shown": 8
+   }
+  }
+ },
+ {
+  "id": "review1_buffer100_top3",
+  "settings": {
+   "review_days": 1,
+   "buffer": 1.0,
+   "top": 3
+  },
+  "context": {
+   "as_of": "2011-12-09",
+   "rows": [
+    {
+     "status": "Order now",
+     "stock_code": "22086",
+     "description": "PAPER CHAIN KIT 50'S CHRISTMAS",
+     "on_hand": 1659,
+     "days_left": 8,
+     "lead_time_days": 10,
+     "demand_low": 1078.0,
+     "demand_mid": 2340.2,
+     "demand_high": 4251.1,
+     "order_qty": 2593,
+     "order_value": 4589.61,
+     "why": "Next 11 days: expect 2,340 units (80% range 1,078-4,251). 1,659 on hand lasts about 8 days; a new order takes 10 days."
+    },
+    {
+     "status": "Order now",
+     "stock_code": "22910",
+     "description": "PAPER CHAIN KIT VINTAGE CHRISTMAS",
+     "on_hand": 144,
+     "days_left": 2,
+     "lead_time_days": 7,
+     "demand_low": 320.4,
+     "demand_mid": 757.3,
+     "demand_high": 1499.2,
+     "order_qty": 1356,
+     "order_value": 2400.12,
+     "why": "Next 8 days: expect 757 units (80% range 320-1,499). 144 on hand lasts about 2 days; a new order takes 7 days."
+    },
+    {
+     "status": "Order now",
+     "stock_code": "22197",
+     "description": "SMALL POPCORN HOLDER",
+     "on_hand": 574,
+     "days_left": 3,
+     "lead_time_days": 5,
+     "demand_low": 889.3,
+     "demand_mid": 2359.3,
+     "demand_high": 5121.4,
+     "order_qty": 4548,
+     "order_value": 2319.48,
+     "why": "Next 6 days: expect 2,359 units (80% range 889-5,121). 574 on hand lasts about 3 days; a new order takes 5 days."
+    }
+   ],
+   "totals": {
+    "order_now": 37,
+    "order_this_week": 63,
+    "products_reviewed": 200,
+    "order_value_gbp": 28663.91,
+    "products_shown": 3
+   }
+  }
+ },
+ {
+  "id": "review1_buffer100_top8",
+  "settings": {
+   "review_days": 1,
+   "buffer": 1.0,
+   "top": 8
+  },
+  "context": {
+   "as_of": "2011-12-09",
+   "rows": [
+    {
+     "status": "Order now",
+     "stock_code": "22086",
+     "description": "PAPER CHAIN KIT 50'S CHRISTMAS",
+     "on_hand": 1659,
+     "days_left": 8,
+     "lead_time_days": 10,
+     "demand_low": 1078.0,
+     "demand_mid": 2340.2,
+     "demand_high": 4251.1,
+     "order_qty": 2593,
+     "order_value": 4589.61,
+     "why": "Next 11 days: expect 2,340 units (80% range 1,078-4,251). 1,659 on hand lasts about 8 days; a new order takes 10 days."
+    },
+    {
+     "status": "Order now",
+     "stock_code": "22910",
+     "description": "PAPER CHAIN KIT VINTAGE CHRISTMAS",
+     "on_hand": 144,
+     "days_left": 2,
+     "lead_time_days": 7,
+     "demand_low": 320.4,
+     "demand_mid": 757.3,
+     "demand_high": 1499.2,
+     "order_qty": 1356,
+     "order_value": 2400.12,
+     "why": "Next 8 days: expect 757 units (80% range 320-1,499). 144 on hand lasts about 2 days; a new order takes 7 days."
+    },
+    {
+     "status": "Order now",
+     "stock_code": "22197",
+     "description": "SMALL POPCORN HOLDER",
+     "on_hand": 574,
+     "days_left": 3,
+     "lead_time_days": 5,
+     "demand_low": 889.3,
+     "demand_mid": 2359.3,
+     "demand_high": 5121.4,
+     "order_qty": 4548,
+     "order_value": 2319.48,
+     "why": "Next 6 days: expect 2,359 units (80% range 889-5,121). 574 on hand lasts about 3 days; a new order takes 5 days."
+    },
+    {
+     "status": "Order now",
+     "stock_code": "22114",
+     "description": "HOT WATER BOTTLE TEA AND SYMPATHY",
+     "on_hand": 215,
+     "days_left": 4,
+     "lead_time_days": 5,
+     "demand_low": 146.6,
+     "demand_mid": 359.8,
+     "demand_high": 729.5,
+     "order_qty": 515,
+     "order_value": 1220.55,
+     "why": "Next 6 days: expect 360 units (80% range 147-730). 215 on hand lasts about 4 days; a new order takes 5 days."
+    },
+    {
+     "status": "Order now",
+     "stock_code": "22178",
+     "description": "VICTORIAN GLASS HANGING T-LIGHT",
+     "on_hand": 579,
+     "days_left": 8,
+     "lead_time_days": 10,
+     "demand_low": 373.5,
+     "demand_mid": 822.0,
+     "demand_high": 1527.8,
+     "order_qty": 949,
+     "order_value": 711.75,
+     "why": "Next 11 days: expect 822 units (80% range 374-1,528). 579 on hand lasts about 8 days; a new order takes 10 days."
+    },
+    {
+     "status": "Order now",
+     "stock_code": "82482",
+     "description": "WOODEN PICTURE FRAME WHITE FINISH",
+     "on_hand": 198,
+     "days_left": 6,
+     "lead_time_days": 10,
+     "demand_low": 129.8,
+     "demand_mid": 322.9,
+     "demand_high": 644.7,
+     "order_qty": 447,
+     "order_value": 683.91,
+     "why": "Next 11 days: expect 323 units (80% range 130-645). 198 on hand lasts about 6 days; a new order takes 10 days."
+    },
+    {
+     "status": "Order now",
+     "stock_code": "22077",
+     "description": "6 RIBBONS RUSTIC CHARM",
+     "on_hand": 88,
+     "days_left": 4,
+     "lead_time_days": 10,
+     "demand_low": 133.4,
+     "demand_mid": 337.2,
+     "demand_high": 678.9,
+     "order_qty": 591,
+     "order_value": 585.09,
+     "why": "Next 11 days: expect 337 units (80% range 133-679). 88 on hand lasts about 4 days; a new order takes 10 days."
+    },
+    {
+     "status": "Order now",
+     "stock_code": "20914",
+     "description": "SET/5 RED SPOTTY LID GLASS BOWLS",
+     "on_hand": 121,
+     "days_left": 5,
+     "lead_time_days": 10,
+     "demand_low": 102.2,
+     "demand_mid": 239.0,
+     "demand_high": 440.5,
+     "order_qty": 320,
+     "order_value": 566.4,
+     "why": "Next 11 days: expect 239 units (80% range 102-440). 121 on hand lasts about 5 days; a new order takes 10 days."
+    }
+   ],
+   "totals": {
+    "order_now": 37,
+    "order_this_week": 63,
+    "products_reviewed": 200,
+    "order_value_gbp": 28663.91,
+    "products_shown": 8
+   }
+  }
+ },
+ {
+  "id": "edge_one_product",
+  "context": {
+   "as_of": "2011-12-09",
+   "rows": [
+    {
+     "status": "Order now",
+     "stock_code": "85123A",
+     "description": "WHITE HANGING HEART T-LIGHT HOLDER",
+     "on_hand": 10,
+     "days_left": 2,
+     "lead_time_days": 5,
+     "demand_low": 40.0,
+     "demand_mid": 60.0,
+     "demand_high": 90.0,
+     "order_qty": 80,
+     "order_value": 204.8,
+     "why": "Next 12 days: expect 60 units (80% range 40-90). 10 on hand lasts about 2 days; a new order takes 5 days."
+    }
+   ],
+   "totals": {
+    "order_now": 1,
+    "order_this_week": 0,
+    "products_reviewed": 1,
+    "order_value_gbp": 204.8,
+    "products_shown": 1
+   }
+  }
+ },
+ {
+  "id": "edge_nothing_to_order",
+  "context": {
+   "as_of": "2011-12-09",
+   "rows": [
+    {
+     "status": "OK",
+     "stock_code": "22423",
+     "description": "REGENCY CAKESTAND 3 TIER",
+     "on_hand": 900,
+     "days_left": 14,
+     "lead_time_days": 3,
+     "demand_low": 100.0,
+     "demand_mid": 150.0,
+     "demand_high": 200.0,
+     "order_qty": 0,
+     "order_value": 0.0,
+     "why": "Next 10 days: expect 150 units (80% range 100-200). 900 on hand lasts 14+ days; a new order takes 3 days."
+    }
+   ],
+   "totals": {
+    "order_now": 0,
+    "order_this_week": 0,
+    "products_reviewed": 1,
+    "order_value_gbp": 0.0,
+    "products_shown": 1
+   }
+  }
+ },
+ {
+  "id": "edge_large_numbers",
+  "context": {
+   "as_of": "2011-12-09",
+   "rows": [
+    {
+     "status": "Order now",
+     "stock_code": "23084",
+     "description": "RABBIT NIGHT LIGHT",
+     "on_hand": 1200,
+     "days_left": 1,
+     "lead_time_days": 10,
+     "demand_low": 9000.0,
+     "demand_mid": 12500.5,
+     "demand_high": 18000.0,
+     "order_qty": 16800,
+     "order_value": 25872.0,
+     "why": "Next 14 days: expect 12,500 units (80% range 9,000-18,000). 1,200 on hand lasts about 1 days; a new order takes 10 days."
+    },
+    {
+     "status": "Order this week",
+     "stock_code": "84879",
+     "description": "ASSORTED COLOUR BIRD ORNAMENT",
+     "on_hand": 300,
+     "days_left": 9,
+     "lead_time_days": 3,
+     "demand_low": 200.0,
+     "demand_mid": 310.0,
+     "demand_high": 450.0,
+     "order_qty": 150,
+     "order_value": 199.5,
+     "why": "Next 10 days: expect 310 units (80% range 200-450). 300 on hand lasts about 9 days; a new order takes 3 days."
+    }
+   ],
+   "totals": {
+    "order_now": 1,
+    "order_this_week": 1,
+    "products_reviewed": 2,
+    "order_value_gbp": 26071.5,
+    "products_shown": 2
+   }
+  }
+ }
+]
