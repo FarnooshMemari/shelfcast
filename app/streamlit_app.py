@@ -21,7 +21,11 @@ import pandas as pd  # noqa: E402
 import streamlit as st  # noqa: E402
 
 from shelfcast import data as datamod  # noqa: E402
+from shelfcast import feedback as feedbackmod  # noqa: E402
+from shelfcast import llm  # noqa: E402
 from shelfcast import pipeline  # noqa: E402
+from shelfcast.assistant import Assistant, RestockTools  # noqa: E402
+from shelfcast.brief_ai import ai_brief  # noqa: E402
 from shelfcast.db import backend_kind, get_backend  # noqa: E402
 from shelfcast.restock import RestockSettings, brief, cortex_brief, recommend  # noqa: E402
 
@@ -337,9 +341,39 @@ def model_view(run: dict, runs: pd.DataFrame) -> None:
         )
 
 
-def brief_view(kind: str, recs: pd.DataFrame, as_of: str, settings: RestockSettings) -> None:
-    key = (settings.review_days, settings.buffer)
-    if kind == "snowflake":
+def _thumbs(key: str, feature: str, question: str, answer: str, model: str, verified: bool | None) -> None:
+    """A thumbs up / down control that logs once per answer."""
+    rating = st.feedback("thumbs", key=f"fb_{key}")
+    if rating is not None and st.session_state.get(f"fb_logged_{key}") != rating:
+        feedbackmod.record(feature, "up" if rating == 1 else "down", question, answer, model, verified)
+        st.session_state[f"fb_logged_{key}"] = rating
+        st.toast("Thanks, noted.")
+
+
+def brief_view(kind: str, recs: pd.DataFrame, as_of: str, settings: RestockSettings, stock_key: int) -> None:
+    key = (settings.review_days, settings.buffer, stock_key)
+    client = llm.client_from_env()
+    if client is not None:
+        st.markdown(
+            f"**{client.model}** turns the order list into a short note for the store manager. Before it is shown, "
+            "every number in the note is checked against the order list; a note that doesn't match is rewritten once, "
+            "and if it still doesn't match you get the built-in summary instead."
+        )
+        if st.button("Write the brief with AI", type="primary"):
+            with st.spinner(f"Asking {client.model}..."):
+                result = ai_brief(client, recs, as_of)
+            st.session_state["ai_brief"] = {"key": key, "result": result}
+        saved = st.session_state.get("ai_brief")
+        if saved and saved["key"] == key:
+            result = saved["result"]
+            if result.source == "ai":
+                st.success(result.text)
+                st.caption(f"Written by {result.model}. {result.report.summary()}" + (" (fixed on the second try)" if result.attempts > 1 else ""))
+                _thumbs(f"brief_{hash(key)}", "brief", "restock brief", result.text, result.model, True)
+                return
+            st.warning(f"The model's note was not used: {result.fallback_reason}. Here is the built-in summary instead.")
+            _thumbs(f"brief_{hash(key)}", "brief", "restock brief", result.text, result.model, False)
+    elif kind == "snowflake":
         st.markdown("Snowflake Cortex turns the order list into a short note for the store manager, inside Snowflake.")
         if st.button("Write the brief with Snowflake Cortex", type="primary"):
             with st.spinner("Asking Cortex..."):
@@ -355,10 +389,73 @@ def brief_view(kind: str, recs: pd.DataFrame, as_of: str, settings: RestockSetti
             st.caption(f"Written by {saved['model']} in Snowflake Cortex, using only the order list above.")
             return
     else:
-        st.info("Running on local DuckDB, so this summary comes from a simple template. Connect Snowflake to have Cortex write it.")
+        st.info(
+            "This summary comes from a simple template. To have a language model write it, set `SHELFCAST_LLM_API_KEY` "
+            "and `SHELFCAST_LLM_MODEL` (any OpenAI-compatible API; see `.env.example`)."
+        )
     text = brief(recs, as_of)
     with st.container(border=True):
         st.markdown(text.replace("\n- ", "\n\n- ", 1))
+
+
+def assistant_view(data: dict, inventory: pd.DataFrame, settings: RestockSettings) -> None:
+    client = llm.client_from_env()
+    st.markdown(
+        "Ask about stock, forecasts and orders in plain language. The assistant can only call four **read-only** "
+        "tools over the tables on this page (the order list, one product, a what-if with other settings, and a "
+        "product search), and every number in its answer is checked against what those tools returned."
+    )
+    if client is None:
+        st.info(
+            "No model is configured. Set `SHELFCAST_LLM_API_KEY` and `SHELFCAST_LLM_MODEL` (see `.env.example`) "
+            "to turn the assistant on. Everything else on this page works without it."
+        )
+        return
+    examples = (
+        "What should I order today and why? · What if lead times go up to 10 days? · "
+        "Which lanterns need an order? · What if we order every 3 days with a 50% buffer?"
+    )
+    st.caption(f"Try: {examples}")
+    history = st.session_state.setdefault("assistant_history", [])
+    for turn in history:
+        with st.chat_message(turn["role"]):
+            st.markdown(turn["content"])
+            if turn.get("tool_runs"):
+                with st.expander(f"What the assistant looked up ({len(turn['tool_runs'])} tool call{'s' if len(turn['tool_runs']) != 1 else ''})"):
+                    for run in turn["tool_runs"]:
+                        st.code(f"{run['name']}({json.dumps(run['arguments'])})", language="text")
+                        rows = run["result"].get("rows") or ([run["result"]["product"]] if "product" in run["result"] else [])
+                        if rows:
+                            st.dataframe(pd.DataFrame(rows), hide_index=True, width="stretch")
+                        extra = {k: v for k, v in run["result"].items() if k not in ("rows", "product")}
+                        if extra:
+                            st.json(extra, expanded=False)
+            if turn.get("verified") is True:
+                st.caption(f":material/verified: {turn['check']}")
+            elif turn.get("verified") is False:
+                st.caption(f":material/warning: Check these before acting: {turn['check']}")
+            if turn["role"] == "assistant":
+                _thumbs(turn["key"], "assistant", turn.get("question", ""), turn["content"], turn.get("model", ""), turn.get("verified"))
+
+    question = st.chat_input("Ask the restock assistant")
+    if not question:
+        return
+    history.append({"role": "user", "content": question})
+    with st.chat_message("user"):
+        st.markdown(question)
+    tools = RestockTools(data["forecasts"], inventory, data["products"], settings, data.get("history"), data["as_of"])
+    with st.chat_message("assistant"):
+        with st.spinner(f"Asking {client.model}..."):
+            answer = Assistant(client, tools).ask(question, history[:-1])
+        st.markdown(answer.text)
+    history.append({
+        "role": "assistant", "content": answer.text, "question": question, "model": answer.model,
+        "tool_runs": [{"name": r.name, "arguments": r.arguments, "result": r.result} for r in answer.tool_runs],
+        "verified": None if answer.error else answer.verified,
+        "check": answer.report.summary() if answer.report else answer.error,
+        "key": f"assistant_{len(history)}",
+    })
+    st.rerun()
 
 
 def render_app(kind: str, data: dict) -> None:
@@ -400,11 +497,12 @@ def render_app(kind: str, data: dict) -> None:
             "Run `python -m shelfcast all` to build your own, on DuckDB or Snowflake."
         )
     kpi_box = st.container()
-    tab_list, tab_product, tab_stock, tab_model, tab_brief = st.tabs(
-        ["Restock list", "Product forecast", "Stock levels", "Model quality", "AI brief"]
+    tab_list, tab_product, tab_stock, tab_model, tab_brief, tab_assistant = st.tabs(
+        ["Restock list", "Product forecast", "Stock levels", "Model quality", "AI brief", "Assistant"]
     )
     with tab_stock:
         edited = stock_editor(inventory, products)
+    stock_key = int(pd.util.hash_pandas_object(edited, index=False).sum())  # the brief is cached per stock edit
     settings = RestockSettings(review_days=review_days, buffer=buffer_pct / 100)
     recs = recommend(fc, edited, products, settings)
     if recs.empty:
@@ -420,7 +518,9 @@ def render_app(kind: str, data: dict) -> None:
     with tab_model:
         model_view(run, data["runs"])
     with tab_brief:
-        brief_view(kind, recs, as_of, settings)
+        brief_view(kind, recs, as_of, settings, stock_key)
+    with tab_assistant:
+        assistant_view(data, edited, settings)
 
 
 def secrets_to_env() -> None:

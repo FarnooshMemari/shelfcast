@@ -18,7 +18,8 @@ Small online shops often reorder by gut feeling or by looking at last month's av
 2. Cleans them with SQL in Snowflake: cancellations, returns, postage, fees and bulk orders that were cancelled later are removed, then sales are rolled up per product per day.
 3. Trains one PyTorch model on the 200 best sellers. For each of the next 14 days it gives a low, expected and high forecast (P10 / P50 / P90), and it does the same for the running total, since that is what an order has to cover.
 4. Turns the forecasts into decisions. Each product gets a status (Order now, Order this week, OK), an order quantity, its cost and a one-line reason. The same rules also run as a SQL view in Snowflake (`MART.RESTOCK_PLAN`).
-5. Shows it all in a Streamlit app: sliders for the safety buffer and how often orders are placed, editable stock levels, charts for each product, the backtest results, and a short restock note written by Snowflake Cortex (or a built-in summary where Cortex isn't available).
+5. Shows it all in a Streamlit app: sliders for the safety buffer and how often orders are placed, editable stock levels, charts for each product and the backtest results.
+6. Adds two AI features on top, both kept honest by the same check: a **restock brief** written by a language model and verified number by number against the order list, and an **assistant** that answers questions ("what if lead times go up to 10 days?") by calling four read-only tools over the plan. See [AI brief and assistant](#ai-brief-and-assistant).
 
 ![Product forecast and stock chart](docs/screenshot_product.png)
 
@@ -51,7 +52,9 @@ flowchart LR
     E -->|"sql/20_restock_plan.sql"| F[("MART.RESTOCK_PLAN")]
     E --> G["Streamlit app"]
     F --> G
-    G -->|"AI_COMPLETE"| H["Snowflake Cortex<br/>restock brief"]
+    G -->|"order list"| H["AI brief<br/>(LLM + grounding check)"]
+    G -->|"4 read-only tools"| I["Assistant<br/>(LLM + tool calls + check)"]
+    H & I --> J["evals + thumbs up/down"]
 ```
 
 ### Model ([`shelfcast/model.py`](shelfcast/model.py))
@@ -67,6 +70,50 @@ flowchart LR
 - Target stock = expected demand for that period + buffer x (high forecast - expected). A 100% buffer plans for the P90, which is roughly a 90% chance of not running out.
 - Order quantity = target - stock on hand - stock already on order.
 - *Order now* if expected sales empty the shelf before a new order could arrive; *Order this week* if an order is needed but there is still time.
+
+## AI brief and assistant
+
+Both features use any OpenAI-compatible chat API (OpenAI, Groq, Together, OpenRouter, a local Ollama server) through one small stdlib-only client ([`shelfcast/llm.py`](shelfcast/llm.py)). Set three variables in `.env` (or in the app's secrets when deployed) and the two tabs switch on; without them the app shows its built-in summary and the assistant stays off.
+
+```bash
+SHELFCAST_LLM_API_KEY=...                 # OPENAI_API_KEY also works
+SHELFCAST_LLM_MODEL=gpt-4o-mini           # or llama-3.1-8b-instant, qwen2.5:7b, ...
+SHELFCAST_LLM_BASE_URL=https://api.openai.com/v1   # e.g. https://api.groq.com/openai/v1 or http://localhost:11434/v1
+```
+
+### The brief, with a grounding check ([`shelfcast/brief_ai.py`](shelfcast/brief_ai.py))
+
+The model gets the top rows of the order list (as JSON) and the totals, and writes a short note for the store manager. The note is not shown until it passes four checks against the very same table:
+
+1. every number in the note appears in the table or its totals (rounding to whole units is allowed);
+2. no stock code appears that is not in the table;
+3. at least one of the three most urgent products is named;
+4. it is under 200 words.
+
+A note that fails is sent back once with the list of problems ("numbers not in the order list: 999, 1,500"). If it fails again, the app shows the plain built-in summary and says why. The check is simple on purpose: it cannot judge whether the advice is sensible, only whether the model stayed inside the numbers it was given. That is the failure that matters most for a tool someone orders stock with.
+
+### The assistant ([`shelfcast/assistant.py`](shelfcast/assistant.py))
+
+The assistant never sees the whole warehouse and never writes SQL. It can call four functions over the tables already on the page, all read-only:
+
+| Tool | What it returns |
+|---|---|
+| `get_restock_plan(status, top)` | The current order list under the current settings |
+| `get_product(product)` | One product's plan row, its 7- and 14-day forecast range and its last 28 days of sales |
+| `what_if(review_days, buffer_pct, lead_time_days, product)` | The order list after re-running the restock rules with other settings, and the change for one product |
+| `search_products(query)` | Products whose name matches, with status and order quantity |
+
+Every tool call and its result are shown under the answer ("What the assistant looked up"), and the answer goes through the same number check against those results. An answer with a number the tools never returned gets one correction round; if it still doesn't match, it is shown with a warning rather than hidden, because the tool results are right there to compare against. Off-topic questions are declined by the system prompt.
+
+### Evaluation ([`shelfcast/evals.py`](shelfcast/evals.py))
+
+`evals/brief_cases.json` holds 15 order lists: the real run under six planning settings, each shown with 3 and with 8 rows, plus three hand-made edge cases (one product, nothing to order, very large numbers). `python -m shelfcast evals --models a,b` has each model write a brief for every case, scores all of them with the grounding check and writes `reports/brief_evals.md`: grounded on the first try, grounded after one retry, how often the app would have fallen back to the template, average length and seconds. The built-in template is scored too, as a baseline that must always be 100%; if it ever isn't, the check is broken, not the model.
+
+To run it: `python -m shelfcast evals --models gpt-4o-mini,llama-3.1-8b-instant` (the models must be reachable through the configured API). Rebuild the cases from your own run with `--make-cases`.
+
+### Feedback
+
+Each brief and each assistant answer has a thumbs up / down. Ratings go to `data/feedback.jsonl` (never committed), and `python -m shelfcast feedback` prints the share rated up per feature and model, next to how many of those answers passed the check. That is the number that decides whether the AI features earn their place.
 
 ## Quick start (no accounts needed)
 
@@ -104,7 +151,7 @@ python -m shelfcast all       # load 1M rows, run the SQL, train, write the fore
 streamlit run app/streamlit_app.py
 ```
 
-The sidebar then shows Snowflake as the warehouse, and the AI brief tab can ask Snowflake Cortex to write the restock note. Cortex's `AI_COMPLETE` isn't available on Snowflake trial accounts; there the app shows its built-in summary instead. The plan can also be queried directly in Snowsight:
+The sidebar then shows Snowflake as the warehouse. When no `SHELFCAST_LLM_API_KEY` is set, the AI brief tab can ask Snowflake Cortex to write the restock note instead (`python -m shelfcast brief --cortex`); Cortex's `AI_COMPLETE` isn't available on Snowflake trial accounts, and there the app shows its built-in summary. The plan can also be queried directly in Snowsight:
 
 ```sql
 SELECT * FROM SHELFCAST.MART.RESTOCK_PLAN ORDER BY order_value DESC;
@@ -121,7 +168,7 @@ SNOWFLAKE_PAT = "paste-the-token-here"
 SNOWFLAKE_ROLE = "SHELFCAST_ROLE"
 ```
 
-Without secrets, or if Snowflake can't be reached, the app shows the saved snapshot from `demo/`.
+Add `SHELFCAST_LLM_API_KEY`, `SHELFCAST_LLM_MODEL` and (if not OpenAI) `SHELFCAST_LLM_BASE_URL` in the same place to turn on the AI brief and the assistant. Without secrets, or if Snowflake can't be reached, the app shows the saved snapshot from `demo/`.
 
 ## Commands
 
@@ -131,7 +178,10 @@ Without secrets, or if Snowflake can't be reached, the app shows the saved snaps
 | `python -m shelfcast load` | Load the transactions and run `sql/10_views.sql` |
 | `python -m shelfcast train` | Backtest, train, forecast, write the restock plan and `reports/RESULTS.md` |
 | `python -m shelfcast all` | The three steps above |
-| `python -m shelfcast brief` | Print the restock brief (`--cortex` has Snowflake Cortex write it) |
+| `python -m shelfcast brief` | Print the restock brief (`--ai` has the configured model write and check it; `--cortex` uses Snowflake Cortex) |
+| `python -m shelfcast ask "..."` | Ask the restock assistant a question from the terminal |
+| `python -m shelfcast evals` | Score the AI brief on the saved order lists (`--models a,b` to compare models; `--make-cases` to rebuild them) |
+| `python -m shelfcast feedback` | Summarise the thumbs up / down given in the app |
 | `python -m shelfcast snapshot` | Save the tables the app needs to `demo/` |
 | `python -m shelfcast check` | Test the warehouse connection |
 
@@ -146,14 +196,21 @@ shelfcast/
     data.py                download, synthetic data, daily sales matrix
     model.py               PyTorch quantile model and loss
     forecast.py            backtest against baselines, final training
-    restock.py             order rules, brief, Snowflake Cortex
+    restock.py             order rules, built-in brief, Snowflake Cortex
     pipeline.py            load, train, reports, snapshot
+    llm.py                 client for any OpenAI-compatible chat API (+ a fake for tests)
+    brief_ai.py            AI brief and the grounding check
+    assistant.py           the assistant: four read-only tools and the tool-calling loop
+    evals.py               eval cases, scoring and the report
+    feedback.py            thumbs up / down log
 sql/
     00_snowflake_setup.sql
     10_views.sql           cleaning and daily sales (Snowflake and DuckDB)
     20_restock_plan.sql    restock plan as a view
 demo/                      snapshot of the real run, used by the app
+evals/brief_cases.json     the order lists the AI brief is scored on
 reports/RESULTS.md         backtest results, written by `train`
+reports/brief_evals.md     AI brief scores, written by `evals`
 docs/                      screenshots
 tests/
 ```
@@ -164,7 +221,7 @@ tests/
 pytest
 ```
 
-The tests check that training windows never include future days, that forecasts are ordered and non-negative, the restock rules on small hand-made cases, the SQL cleaning, that the SQL plan matches the Python plan, the app (with Streamlit's AppTest) and the full command line on synthetic data. They run in about 15 seconds.
+The tests check that training windows never include future days, that forecasts are ordered and non-negative, the restock rules on small hand-made cases, the SQL cleaning, that the SQL plan matches the Python plan, the app (with Streamlit's AppTest) and the full command line on synthetic data. The AI parts are tested without any network call: a scripted fake model stands in for the API (a careful one, a sloppy one that invents numbers, and one that loops on tool calls), the HTTP client is tested against a tiny local server, and the grounding check has its own cases. They run in about 20 seconds.
 
 ## Limitations
 
@@ -172,9 +229,12 @@ The tests check that training windows never include future days, that forecasts 
 - "Today" is 9 Dec 2011, the last day in the data.
 - The backtest is a single 14-day window in the busiest season of the year. A rolling backtest over many windows would be a stronger test.
 - The safety buffer slider moves linearly between the P50 and P90 forecasts, so values in between are only approximate service levels.
+- The grounding check verifies that the AI's numbers come from the data, not that its reasoning is right. A brief can pass while recommending the wrong product; that is what the thumbs and the evals are for.
+- The assistant keeps the last turns of the conversation as plain text, so a long chat slowly loses detail, and each answer is limited to four rounds of tool calls.
 
 ## Next steps
 
+- Run the evals on two or three models and keep the one with the best grounded rate per pound.
 - Rolling backtests, plus holiday and price features.
 - Train inside Snowflake (Snowpark Container Services) and refresh the plan on a schedule with Snowflake Tasks.
 - Connect a real inventory feed and round orders to supplier pack sizes.

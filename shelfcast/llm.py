@@ -1,0 +1,171 @@
+"""One small client for any OpenAI-compatible chat endpoint, plus a fake for tests.
+
+It only needs the standard library, so the app's light requirements stay light. It works
+with OpenAI, Groq, Together, OpenRouter, a local Ollama server (``http://localhost:11434/v1``)
+and any other service that speaks the ``/chat/completions`` API with tool calling.
+
+Settings come from the environment (or ``.env``):
+    SHELFCAST_LLM_API_KEY   the key (OPENAI_API_KEY is also accepted)
+    SHELFCAST_LLM_MODEL     the model name, e.g. gpt-4o-mini or llama-3.1-8b-instant
+    SHELFCAST_LLM_BASE_URL  the API root, default https://api.openai.com/v1
+"""
+from __future__ import annotations
+
+import json
+import os
+import time
+import urllib.error
+import urllib.request
+from dataclasses import dataclass, field
+
+from .config import load_dotenv
+
+DEFAULT_BASE_URL = "https://api.openai.com/v1"
+DEFAULT_MODEL = "gpt-4o-mini"
+
+
+@dataclass
+class ToolCall:
+    id: str
+    name: str
+    arguments: dict
+
+
+@dataclass
+class LLMResponse:
+    text: str
+    tool_calls: list[ToolCall] = field(default_factory=list)
+    model: str = ""
+    seconds: float = 0.0
+    raw_message: dict | None = None  # the assistant message as the API returned it, to echo back
+
+
+class LLMError(RuntimeError):
+    """The endpoint could not be reached or answered with an error."""
+
+
+@dataclass
+class LLMSettings:
+    api_key: str
+    model: str = DEFAULT_MODEL
+    base_url: str = DEFAULT_BASE_URL
+    temperature: float = 0.2
+    timeout: float = 60.0
+
+    @classmethod
+    def from_env(cls, model: str | None = None) -> "LLMSettings | None":
+        """None when no key is set: the app then uses its built-in summary instead."""
+        load_dotenv()
+        key = os.environ.get("SHELFCAST_LLM_API_KEY") or os.environ.get("OPENAI_API_KEY")
+        if not key:
+            return None
+        return cls(
+            api_key=key,
+            model=model or os.environ.get("SHELFCAST_LLM_MODEL") or DEFAULT_MODEL,
+            base_url=(os.environ.get("SHELFCAST_LLM_BASE_URL") or DEFAULT_BASE_URL).rstrip("/"),
+        )
+
+
+class OpenAICompatibleClient:
+    """Calls ``POST {base_url}/chat/completions``. One retry on a 429 or 5xx."""
+
+    def __init__(self, settings: LLMSettings):
+        self.settings = settings
+
+    @property
+    def model(self) -> str:
+        return self.settings.model
+
+    def complete(self, messages: list[dict], tools: list[dict] | None = None, max_tokens: int = 600) -> LLMResponse:
+        body: dict = {
+            "model": self.settings.model,
+            "messages": messages,
+            "temperature": self.settings.temperature,
+            "max_tokens": max_tokens,
+        }
+        if tools:
+            body["tools"] = tools
+            body["tool_choice"] = "auto"
+        request = urllib.request.Request(
+            f"{self.settings.base_url}/chat/completions",
+            data=json.dumps(body).encode("utf-8"),
+            headers={"Content-Type": "application/json", "Authorization": f"Bearer {self.settings.api_key}"},
+            method="POST",
+        )
+        started = time.perf_counter()
+        for attempt in (1, 2):
+            try:
+                with urllib.request.urlopen(request, timeout=self.settings.timeout) as resp:
+                    payload = json.loads(resp.read().decode("utf-8"))
+                break
+            except urllib.error.HTTPError as exc:
+                detail = exc.read().decode("utf-8", errors="replace")[:300]
+                if attempt == 1 and (exc.code == 429 or exc.code >= 500):
+                    time.sleep(2.0)
+                    continue
+                raise LLMError(f"{self.settings.model} answered HTTP {exc.code}: {detail}") from exc
+            except (urllib.error.URLError, TimeoutError) as exc:
+                raise LLMError(f"Could not reach {self.settings.base_url}: {exc}") from exc
+        return parse_chat_completion(payload, self.settings.model, time.perf_counter() - started)
+
+
+def parse_chat_completion(payload: dict, model: str, seconds: float = 0.0) -> LLMResponse:
+    try:
+        message = payload["choices"][0]["message"]
+    except (KeyError, IndexError, TypeError) as exc:
+        raise LLMError(f"Unexpected answer from the model: {str(payload)[:200]}") from exc
+    calls = []
+    for call in message.get("tool_calls") or []:
+        fn = call.get("function", {})
+        try:
+            args = json.loads(fn.get("arguments") or "{}")
+        except json.JSONDecodeError:
+            args = {}
+        calls.append(ToolCall(id=str(call.get("id", "")), name=str(fn.get("name", "")), arguments=args))
+    text = message.get("content") or ""
+    if isinstance(text, list):  # some servers return content parts
+        text = "".join(part.get("text", "") for part in text if isinstance(part, dict))
+    return LLMResponse(text=text.strip(), tool_calls=calls, model=payload.get("model") or model, seconds=seconds, raw_message=message)
+
+
+class FakeClient:
+    """A scripted model for tests and offline demos.
+
+    ``script`` is a list of responses, used in order. Each item is either a string (the
+    model's final text) or a list of ``(tool_name, arguments)`` pairs (one round of tool calls).
+    A callable instead of a list is called with the messages and must return such an item,
+    which lets a test answer from the tool results it sees.
+    """
+
+    def __init__(self, script, model: str = "fake-model"):
+        self.script = script
+        self.model = model
+        self.calls: list[dict] = []
+        self._step = 0
+
+    def complete(self, messages: list[dict], tools: list[dict] | None = None, max_tokens: int = 600) -> LLMResponse:
+        self.calls.append({"messages": messages, "tools": tools})
+        if callable(self.script):
+            item = self.script(messages)
+        else:
+            if self._step >= len(self.script):
+                raise LLMError("FakeClient ran out of scripted answers")
+            item = self.script[self._step]
+            self._step += 1
+        if isinstance(item, str):
+            return LLMResponse(text=item, model=self.model, raw_message={"role": "assistant", "content": item})
+        calls = [ToolCall(id=f"call_{i}", name=name, arguments=args) for i, (name, args) in enumerate(item)]
+        raw = {
+            "role": "assistant",
+            "content": None,
+            "tool_calls": [
+                {"id": c.id, "type": "function", "function": {"name": c.name, "arguments": json.dumps(c.arguments)}}
+                for c in calls
+            ],
+        }
+        return LLMResponse(text="", tool_calls=calls, model=self.model, raw_message=raw)
+
+
+def client_from_env(model: str | None = None) -> OpenAICompatibleClient | None:
+    settings = LLMSettings.from_env(model)
+    return OpenAICompatibleClient(settings) if settings else None
