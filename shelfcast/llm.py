@@ -8,11 +8,13 @@ Settings come from the environment (or ``.env``):
     SHELFCAST_LLM_API_KEY   the key (OPENAI_API_KEY is also accepted)
     SHELFCAST_LLM_MODEL     the model name, e.g. gpt-4o-mini or llama-3.1-8b-instant
     SHELFCAST_LLM_BASE_URL  the API root, default https://api.openai.com/v1
+    SHELFCAST_LLM_MIN_INTERVAL  optional pause in seconds between calls, for free tiers with low rate limits
 """
 from __future__ import annotations
 
 import json
 import os
+import re
 import time
 import urllib.error
 import urllib.request
@@ -52,6 +54,7 @@ class LLMSettings:
     temperature: float = 0.2
     timeout: float = 60.0
     reasoning_effort: str | None = None  # e.g. "none" or "low"; only sent when set
+    min_interval: float = 0.0  # seconds to leave between calls (free tiers allow only a few per minute)
 
     @classmethod
     def from_env(cls, model: str | None = None) -> "LLMSettings | None":
@@ -66,14 +69,17 @@ class LLMSettings:
             base_url=(os.environ.get("SHELFCAST_LLM_BASE_URL") or DEFAULT_BASE_URL).rstrip("/"),
             reasoning_effort=os.environ.get("SHELFCAST_LLM_REASONING_EFFORT") or None,
             timeout=float(os.environ.get("SHELFCAST_LLM_TIMEOUT") or 60.0),
+            min_interval=float(os.environ.get("SHELFCAST_LLM_MIN_INTERVAL") or 0.0),
         )
 
 
 class OpenAICompatibleClient:
-    """Calls ``POST {base_url}/chat/completions``. One retry on a 429 or 5xx."""
+    """Calls ``POST {base_url}/chat/completions``. One retry on a 5xx; a 429 (rate limit) waits for
+    the delay the service asks for and tries again, up to four times in all."""
 
     def __init__(self, settings: LLMSettings):
         self.settings = settings
+        self._last_call = 0.0
 
     @property
     def model(self) -> str:
@@ -98,20 +104,39 @@ class OpenAICompatibleClient:
             method="POST",
         )
         started = time.perf_counter()
-        for attempt in (1, 2):
+        wait = self.settings.min_interval - (time.monotonic() - self._last_call)
+        if self._last_call and wait > 0:
+            time.sleep(wait)
+        for attempt in (1, 2, 3, 4):
             try:
+                self._last_call = time.monotonic()
                 with urllib.request.urlopen(request, timeout=self.settings.timeout) as resp:
                     payload = json.loads(resp.read().decode("utf-8"))
                 break
             except urllib.error.HTTPError as exc:
-                detail = exc.read().decode("utf-8", errors="replace")[:300]
-                if attempt == 1 and (exc.code == 429 or exc.code >= 500):
+                detail = exc.read().decode("utf-8", errors="replace")[:1200]
+                if exc.code == 429 and attempt < 4:
+                    time.sleep(_rate_limit_wait(detail, exc.headers.get("Retry-After") if exc.headers else None))
+                    continue
+                if exc.code >= 500 and attempt == 1:
                     time.sleep(2.0)
                     continue
                 raise LLMError(f"{self.settings.model} answered HTTP {exc.code}: {detail}") from exc
             except (urllib.error.URLError, TimeoutError) as exc:
                 raise LLMError(f"Could not reach {self.settings.base_url}: {exc}") from exc
         return parse_chat_completion(payload, self.settings.model, time.perf_counter() - started)
+
+
+def _rate_limit_wait(detail: str, retry_after: str | None) -> float:
+    """Seconds to wait after a 429: the service's own hint when it gives one, else 20, at most 70."""
+    seconds = 20.0
+    if retry_after and retry_after.strip().replace(".", "", 1).isdigit():
+        seconds = float(retry_after)
+    else:
+        hint = re.search(r'retry(?:Delay)?[^0-9]{0,20}([0-9]+(?:\.[0-9]+)?)\s*s', detail, re.IGNORECASE)
+        if hint:
+            seconds = float(hint.group(1))
+    return min(max(seconds, 2.0) + 1.0, 70.0)
 
 
 def parse_chat_completion(payload: dict, model: str, seconds: float = 0.0) -> LLMResponse:

@@ -92,3 +92,33 @@ def test_timeout_and_reasoning_effort_come_from_the_environment(monkeypatch):
     assert settings.timeout == 180.0 and settings.reasoning_effort == "none"
     monkeypatch.delenv("SHELFCAST_LLM_TIMEOUT")
     assert LLMSettings.from_env().timeout == 60.0
+
+
+def test_a_rate_limit_waits_for_the_hinted_delay_then_succeeds(server, monkeypatch):
+    import shelfcast.llm as llm
+
+    waits = []
+    monkeypatch.setattr(llm.time, "sleep", lambda s: waits.append(s))
+    _Handler.responses = [
+        (429, {"error": {"details": [{"retryDelay": "12s"}]}}),
+        (429, {"error": "quota"}),
+        (200, {"choices": [{"message": {"content": "ok"}}]}),
+    ]
+    assert _client(server).complete([{"role": "user", "content": "x"}]).text == "ok"
+    assert waits == [13.0, 21.0]
+
+
+def test_a_rate_limit_that_never_clears_is_reported_after_four_tries(server, monkeypatch):
+    import shelfcast.llm as llm
+
+    monkeypatch.setattr(llm.time, "sleep", lambda *_: None)
+    _Handler.responses = [(429, {"error": "quota"})] * 4
+    with pytest.raises(LLMError, match="HTTP 429"):
+        _client(server).complete([{"role": "user", "content": "x"}])
+    assert len(_Handler.requests) == 4
+
+
+def test_min_interval_comes_from_the_environment(monkeypatch):
+    monkeypatch.setenv("SHELFCAST_LLM_API_KEY", "k")
+    monkeypatch.setenv("SHELFCAST_LLM_MIN_INTERVAL", "7")
+    assert LLMSettings.from_env().min_interval == 7.0
