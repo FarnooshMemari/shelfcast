@@ -51,6 +51,7 @@ class LLMSettings:
     base_url: str = DEFAULT_BASE_URL
     temperature: float = 0.2
     timeout: float = 60.0
+    reasoning_effort: str | None = None  # e.g. "none" or "low"; only sent when set
 
     @classmethod
     def from_env(cls, model: str | None = None) -> "LLMSettings | None":
@@ -63,6 +64,7 @@ class LLMSettings:
             api_key=key,
             model=model or os.environ.get("SHELFCAST_LLM_MODEL") or DEFAULT_MODEL,
             base_url=(os.environ.get("SHELFCAST_LLM_BASE_URL") or DEFAULT_BASE_URL).rstrip("/"),
+            reasoning_effort=os.environ.get("SHELFCAST_LLM_REASONING_EFFORT") or None,
         )
 
 
@@ -76,13 +78,15 @@ class OpenAICompatibleClient:
     def model(self) -> str:
         return self.settings.model
 
-    def complete(self, messages: list[dict], tools: list[dict] | None = None, max_tokens: int = 600) -> LLMResponse:
+    def complete(self, messages: list[dict], tools: list[dict] | None = None, max_tokens: int = 1500) -> LLMResponse:
         body: dict = {
             "model": self.settings.model,
             "messages": messages,
             "temperature": self.settings.temperature,
             "max_tokens": max_tokens,
         }
+        if self.settings.reasoning_effort:
+            body["reasoning_effort"] = self.settings.reasoning_effort
         if tools:
             body["tools"] = tools
             body["tool_choice"] = "auto"
@@ -122,6 +126,11 @@ def parse_chat_completion(payload: dict, model: str, seconds: float = 0.0) -> LL
         except json.JSONDecodeError:
             args = {}
         calls.append(ToolCall(id=str(call.get("id", "")), name=str(fn.get("name", "")), arguments=args))
+    if payload["choices"][0].get("finish_reason") == "length" and not calls:
+        # Models that "think" first can spend the whole budget before the answer starts, and
+        # what is left is a fragment. Better to say so than to hand a fragment to the checks.
+        raise LLMError(f"{model} ran out of tokens before finishing its answer (finish_reason=length). "
+                       "Set SHELFCAST_LLM_REASONING_EFFORT=low (or none) or choose a model that does not think first.")
     text = message.get("content") or ""
     if isinstance(text, list):  # some servers return content parts
         text = "".join(part.get("text", "") for part in text if isinstance(part, dict))
@@ -143,7 +152,7 @@ class FakeClient:
         self.calls: list[dict] = []
         self._step = 0
 
-    def complete(self, messages: list[dict], tools: list[dict] | None = None, max_tokens: int = 600) -> LLMResponse:
+    def complete(self, messages: list[dict], tools: list[dict] | None = None, max_tokens: int = 1500) -> LLMResponse:
         self.calls.append({"messages": messages, "tools": tools})
         if callable(self.script):
             item = self.script(messages)

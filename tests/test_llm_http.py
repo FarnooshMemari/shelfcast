@@ -67,3 +67,18 @@ def test_client_retries_once_on_a_server_error_then_gives_up(server, monkeypatch
 def test_client_reports_an_unreachable_endpoint():
     with pytest.raises(LLMError, match="Could not reach"):
         _client("http://127.0.0.1:9/v1").complete([{"role": "user", "content": "x"}])
+
+
+def test_a_reply_cut_off_by_the_token_limit_is_an_error_not_a_fragment(server):
+    _Handler.responses = [(200, {"choices": [{"finish_reason": "length", "message": {"role": "assistant", "content": "8, lead_time_days 10)"}}]})]
+    with pytest.raises(LLMError, match="ran out of tokens"):
+        _client(server).complete([{"role": "user", "content": "x"}])
+
+
+def test_reasoning_effort_is_only_sent_when_set(server):
+    _Handler.responses = [(200, {"choices": [{"finish_reason": "stop", "message": {"content": "ok"}}]})] * 2
+    _client(server).complete([{"role": "user", "content": "x"}])
+    assert "reasoning_effort" not in _Handler.requests[0]["body"]
+    settings = LLMSettings(api_key="k", model="m", base_url=server, timeout=5, reasoning_effort="low")
+    OpenAICompatibleClient(settings).complete([{"role": "user", "content": "x"}])
+    assert _Handler.requests[1]["body"]["reasoning_effort"] == "low" and _Handler.requests[1]["body"]["max_tokens"] == 1500

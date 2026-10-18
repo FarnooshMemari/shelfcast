@@ -79,6 +79,7 @@ Both features use any OpenAI-compatible chat API (OpenAI, Groq, Together, OpenRo
 SHELFCAST_LLM_API_KEY=...                 # OPENAI_API_KEY also works
 SHELFCAST_LLM_MODEL=gpt-4o-mini           # or llama-3.1-8b-instant, qwen2.5:7b, ...
 SHELFCAST_LLM_BASE_URL=https://api.openai.com/v1   # e.g. https://api.groq.com/openai/v1 or http://localhost:11434/v1
+SHELFCAST_LLM_REASONING_EFFORT=low   # optional; for models that think first (e.g. Gemini 3) so the answer is not cut off
 ```
 
 ### The brief, with a grounding check ([`shelfcast/brief_ai.py`](shelfcast/brief_ai.py))

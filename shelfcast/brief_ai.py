@@ -192,7 +192,7 @@ def ai_brief(client, recs: pd.DataFrame, as_of: str, top: int = 8, context: dict
     text = ""
     for attempt in (1, 2):
         try:
-            response = client.complete(messages, max_tokens=400)
+            response = client.complete(messages, max_tokens=1500)
         except LLMError as exc:
             return BriefResult(text=fallback, source="template", model=model, attempts=attempt, fallback_reason=str(exc))
         model = response.model or model

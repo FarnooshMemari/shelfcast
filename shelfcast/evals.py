@@ -112,7 +112,7 @@ class _TrackingClient:
         self.calls = 0
         self.seconds = 0.0
 
-    def complete(self, messages, tools=None, max_tokens=600):
+    def complete(self, messages, tools=None, max_tokens=1500):
         self.calls += 1
         started = time.perf_counter()
         resp = self.client.complete(messages, tools=tools, max_tokens=max_tokens)
