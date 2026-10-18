@@ -82,3 +82,13 @@ def test_reasoning_effort_is_only_sent_when_set(server):
     settings = LLMSettings(api_key="k", model="m", base_url=server, timeout=5, reasoning_effort="low")
     OpenAICompatibleClient(settings).complete([{"role": "user", "content": "x"}])
     assert _Handler.requests[1]["body"]["reasoning_effort"] == "low" and _Handler.requests[1]["body"]["max_tokens"] == 1500
+
+
+def test_timeout_and_reasoning_effort_come_from_the_environment(monkeypatch):
+    monkeypatch.setenv("SHELFCAST_LLM_API_KEY", "k")
+    monkeypatch.setenv("SHELFCAST_LLM_TIMEOUT", "180")
+    monkeypatch.setenv("SHELFCAST_LLM_REASONING_EFFORT", "none")
+    settings = LLMSettings.from_env()
+    assert settings.timeout == 180.0 and settings.reasoning_effort == "none"
+    monkeypatch.delenv("SHELFCAST_LLM_TIMEOUT")
+    assert LLMSettings.from_env().timeout == 60.0

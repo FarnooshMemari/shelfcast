@@ -65,6 +65,7 @@ class LLMSettings:
             model=model or os.environ.get("SHELFCAST_LLM_MODEL") or DEFAULT_MODEL,
             base_url=(os.environ.get("SHELFCAST_LLM_BASE_URL") or DEFAULT_BASE_URL).rstrip("/"),
             reasoning_effort=os.environ.get("SHELFCAST_LLM_REASONING_EFFORT") or None,
+            timeout=float(os.environ.get("SHELFCAST_LLM_TIMEOUT") or 60.0),
         )
 
 

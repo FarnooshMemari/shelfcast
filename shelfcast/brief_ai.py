@@ -34,7 +34,9 @@ SYSTEM_PROMPT = (
     "exactly as given (you may round to whole units); name products as they are written in "
     "the data; do not mention products that are not in the data; order_value is in GBP; "
     "days_left is how long current stock lasts; demand_mid is the expected units until the "
-    "next delivery; demand_low and demand_high are the 80% range."
+    "next delivery; demand_low and demand_high are the 80% range. Start straight with the "
+    "recommendation: no greeting, no sign-off. Write in plain words and never copy field "
+    "names such as demand_mid or days_left into the brief; say expected demand and days of stock."
 )
 
 
