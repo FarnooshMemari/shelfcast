@@ -14,7 +14,7 @@ class _Handler(BaseHTTPRequestHandler):
 
     def do_POST(self):  # noqa: N802 - http.server naming
         body = json.loads(self.rfile.read(int(self.headers["Content-Length"])))
-        _Handler.requests.append({"path": self.path, "auth": self.headers.get("Authorization"), "body": body})
+        _Handler.requests.append({"path": self.path, "auth": self.headers.get("Authorization"), "agent": self.headers.get("User-Agent"), "body": body})
         status, payload = _Handler.responses.pop(0)
         data = json.dumps(payload).encode()
         self.send_response(status)
@@ -46,7 +46,7 @@ def test_client_posts_messages_and_tools_and_reads_the_answer(server):
     resp = _client(server).complete([{"role": "user", "content": "hi"}], tools=[{"type": "function", "function": {"name": "f", "parameters": {"type": "object"}}}])
     assert resp.text == "Order the lanterns." and resp.model == "test-model-2024" and resp.seconds >= 0
     sent = _Handler.requests[0]
-    assert sent["path"] == "/v1/chat/completions" and sent["auth"] == "Bearer secret"
+    assert sent["path"] == "/v1/chat/completions" and sent["auth"] == "Bearer secret" and sent["agent"] == "shelfcast/1.0"
     assert sent["body"]["model"] == "test-model" and sent["body"]["tool_choice"] == "auto" and sent["body"]["messages"][0]["content"] == "hi"
 
 

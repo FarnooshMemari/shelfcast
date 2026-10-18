@@ -100,7 +100,12 @@ class OpenAICompatibleClient:
         request = urllib.request.Request(
             f"{self.settings.base_url}/chat/completions",
             data=json.dumps(body).encode("utf-8"),
-            headers={"Content-Type": "application/json", "Authorization": f"Bearer {self.settings.api_key}"},
+            headers={
+                "Content-Type": "application/json",
+                "Authorization": f"Bearer {self.settings.api_key}",
+                # Some services (Groq, behind Cloudflare) refuse Python's default urllib User-Agent with a 403.
+                "User-Agent": "shelfcast/1.0",
+            },
             method="POST",
         )
         started = time.perf_counter()
